@@ -42,7 +42,6 @@ namespace BagAPI
             // Add framework services.
             services.AddMvc();
 
-
             string path = System.Environment.GetEnvironmentVariable("BAG_DB");
             var connection = $"Filename={path}";
             Console.WriteLine($"connection = {connection}");

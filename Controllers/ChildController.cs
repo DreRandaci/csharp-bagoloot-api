@@ -35,10 +35,29 @@ namespace BagAPI.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "GetChild")]
+        public IActionResult Get([FromRoute] int id)
         {
-            return "value";
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                Child child = _context.Child.Single(m => m.ChildId == id);
+
+                if (child == null)
+                {
+                    return NotFound();
+                }
+                
+                return Ok(child);
+            }
+            catch (System.InvalidOperationException ex)
+            {
+                return NotFound();
+            }
         }
 
         // POST api/values
@@ -68,24 +87,68 @@ namespace BagAPI.Controllers
                 }
             }
 
-            return CreatedAtRoute("GetToy", new { id = child.ChildId }, child);
+            return CreatedAtRoute("GetChild", new { id = child.ChildId }, child);
         }
 
-    private bool ChildExists(int kidId)
-    {
-      return _context.Child.Count(e => e.ChildId == kidId) > 0;
-    }
-
-    // PUT api/values/5
-    [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        private bool ChildExists(int kidId)
         {
+          return _context.Child.Count(e => e.ChildId == kidId) > 0;
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Child child)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != child.ChildId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(child).State = EntityState.Modified;
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ChildExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Child child = _context.Child.Single(m => m.ChildId == id);
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            _context.Child.Remove(child);
+            _context.SaveChanges();
+
+            return Ok(child);
         }
     }
 }
