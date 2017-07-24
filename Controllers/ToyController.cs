@@ -35,10 +35,29 @@ namespace BagAPI.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "GetToy")]
+        public IActionResult Get([FromRoute] int id)
         {
-            return "value";
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                Toy toy = _context.Toy.Single(m => m.ToyId == id);
+
+                if (toy == null)
+                {
+                    return NotFound();
+                }
+                
+                return Ok(toy);
+            }
+            catch (System.InvalidOperationException ex)
+            {
+                return NotFound();
+            }
         }
 
         // POST api/values
