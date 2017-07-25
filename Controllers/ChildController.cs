@@ -87,7 +87,7 @@ namespace BagAPI.Controllers
                 }
             }
 
-            return CreatedAtRoute("GetToy", new { id = child.ChildId }, child);
+            return CreatedAtRoute("GetChild", new { id = child.ChildId }, child);
         }
 
         private bool ChildExists(int kidId)
