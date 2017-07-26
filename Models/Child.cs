@@ -17,7 +17,7 @@ namespace BagAPI.Models
     [Required]
     public string Name { get; set; }
     public int Delivered { get; set; }
-    ICollection<Toy> Toys;
+    public virtual ICollection<Toy> Toys { get; set; }
 
   }
 }

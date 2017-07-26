@@ -40,7 +40,8 @@ namespace BagAPI
             });
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             string path = System.Environment.GetEnvironmentVariable("BAG_DB");
             var connection = $"Filename={path}";

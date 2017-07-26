@@ -8,8 +8,8 @@ using BagAPI.Data;
 namespace BagAPI.Migrations
 {
     [DbContext(typeof(BagAPIContext))]
-    [Migration("20170724143319_Initial")]
-    partial class Initial
+    [Migration("20170726152638_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace BagAPI.Migrations
                     b.Property<int>("ChildId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Delivered");
+                    b.Property<int>("Delivered");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -51,7 +51,7 @@ namespace BagAPI.Migrations
             modelBuilder.Entity("BagAPI.Models.Toy", b =>
                 {
                     b.HasOne("BagAPI.Models.Child", "Child")
-                        .WithMany()
+                        .WithMany("Toys")
                         .HasForeignKey("ChildId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

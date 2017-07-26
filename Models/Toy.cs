@@ -12,6 +12,6 @@ namespace BagAPI.Models
 
     public int ChildId { get; set; }
 
-    public Child Child { get; set; }
+    public virtual Child Child { get; set; }
   }
 }
