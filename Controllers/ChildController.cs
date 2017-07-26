@@ -31,7 +31,6 @@ namespace BagAPI.Controllers
             }
 
             return Ok(children);
-
         }
 
         // GET api/values/5
