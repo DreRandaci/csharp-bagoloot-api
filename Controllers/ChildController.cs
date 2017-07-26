@@ -59,7 +59,7 @@ namespace BagAPI.Controllers
             }
         }
 
-        // POST api/values
+        // POST api/child
         [HttpPost]
         public IActionResult Post([FromBody] Child child)
         {
@@ -69,6 +69,39 @@ namespace BagAPI.Controllers
             }
 
             _context.Child.Add(child);
+            
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                if (ChildExists(child.ChildId))
+                {
+                    return new StatusCodeResult(StatusCodes.Status409Conflict);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtRoute("GetChild", new { id = child.ChildId }, child);
+        }
+
+        [HttpPost("/api/Child/Create")]
+        public IActionResult Post([FromBody] ChildToy childToy)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Child child = new Child(){Name=childToy.ChildName};
+            _context.Child.Add(child);
+
+            Toy toy = new Toy(){Name=childToy.ToyName, ChildId=child.ChildId};
+            _context.Toy.Add(toy);
             
             try
             {
