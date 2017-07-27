@@ -8,7 +8,7 @@ using BagAPI.Data;
 namespace BagAPI.Migrations
 {
     [DbContext(typeof(BagAPIContext))]
-    [Migration("20170726152638_initial")]
+    [Migration("20170727023145_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,37 @@ namespace BagAPI.Migrations
                     b.ToTable("Child");
                 });
 
+            modelBuilder.Entity("BagAPI.Models.FavoriteReindeer", b =>
+                {
+                    b.Property<int>("FavoriteReindeerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ChildId");
+
+                    b.Property<int>("ReindeerId");
+
+                    b.HasKey("FavoriteReindeerId");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("ReindeerId");
+
+                    b.ToTable("FavoriteReindeer");
+                });
+
+            modelBuilder.Entity("BagAPI.Models.Reindeer", b =>
+                {
+                    b.Property<int>("ReindeerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("ReindeerId");
+
+                    b.ToTable("Reindeer");
+                });
+
             modelBuilder.Entity("BagAPI.Models.Toy", b =>
                 {
                     b.Property<int>("ToyId")
@@ -46,6 +77,19 @@ namespace BagAPI.Migrations
                     b.HasIndex("ChildId");
 
                     b.ToTable("Toy");
+                });
+
+            modelBuilder.Entity("BagAPI.Models.FavoriteReindeer", b =>
+                {
+                    b.HasOne("BagAPI.Models.Child", "Child")
+                        .WithMany("Favorites")
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BagAPI.Models.Reindeer", "Reindeer")
+                        .WithMany("Favorites")
+                        .HasForeignKey("ReindeerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BagAPI.Models.Toy", b =>

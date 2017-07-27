@@ -59,6 +59,67 @@ namespace BagAPI.Data
                     context.Toy.Add(i);
                 }
                 context.SaveChanges();
+
+
+                var reindeer = new Reindeer[]
+                {
+                    new Reindeer { 
+                        Name = "Dasher"
+                    },
+                    new Reindeer { 
+                        Name = "Dancer"
+                    },
+                    new Reindeer { 
+                        Name = "Prancer"
+                    },
+                    new Reindeer { 
+                        Name = "Vixen"
+                    },
+                };
+
+                foreach (Reindeer i in reindeer)
+                {
+                    context.Reindeer.Add(i);
+                }
+                context.SaveChanges();
+
+                var favorites = new FavoriteReindeer[]
+                {
+                    new FavoriteReindeer { 
+                        ReindeerId = reindeer.Single(s => s.Name == "Dasher").ReindeerId,
+                        ChildId = children.Single(s => s.Name == "Svetlana").ChildId
+                    },
+                    new FavoriteReindeer { 
+                        ReindeerId = reindeer.Single(s => s.Name == "Dasher").ReindeerId,
+                        ChildId = children.Single(s => s.Name == "Nigel").ChildId
+                    },
+                    new FavoriteReindeer { 
+                        ReindeerId = reindeer.Single(s => s.Name == "Dasher").ReindeerId,
+                        ChildId = children.Single(s => s.Name == "Sequina").ChildId
+                    },
+                    new FavoriteReindeer { 
+                        ReindeerId = reindeer.Single(s => s.Name == "Vixen").ReindeerId,
+                        ChildId = children.Single(s => s.Name == "Svetlana").ChildId
+                    },
+                    new FavoriteReindeer { 
+                        ReindeerId = reindeer.Single(s => s.Name == "Dancer").ReindeerId,
+                        ChildId = children.Single(s => s.Name == "Nigel").ChildId
+                    },
+                    new FavoriteReindeer { 
+                        ReindeerId = reindeer.Single(s => s.Name == "Prancer").ReindeerId,
+                        ChildId = children.Single(s => s.Name == "Sequina").ChildId
+                    },
+                    new FavoriteReindeer { 
+                        ReindeerId = reindeer.Single(s => s.Name == "Prancer").ReindeerId,
+                        ChildId = children.Single(s => s.Name == "Sequina").ChildId
+                    },
+                };
+
+                foreach (FavoriteReindeer i in favorites)
+                {
+                    context.FavoriteReindeer.Add(i);
+                }
+                context.SaveChanges();
             }
        }
     }
