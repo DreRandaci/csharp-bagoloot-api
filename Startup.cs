@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using BagAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using BagAPI.Data;
 
 namespace BagAPI
 {
@@ -40,7 +40,8 @@ namespace BagAPI
             });
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             string path = System.Environment.GetEnvironmentVariable("BAG_DB");
             var connection = $"Filename={path}";
@@ -57,6 +58,8 @@ namespace BagAPI
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            DbInitializer.Initialize(app.ApplicationServices);
 
             app.UseMvc();
 

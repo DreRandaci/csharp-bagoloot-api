@@ -8,9 +8,10 @@ using BagAPI.Data;
 namespace BagAPI.Migrations
 {
     [DbContext(typeof(BagAPIContext))]
-    partial class BagAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20170727023145_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");

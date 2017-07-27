@@ -11,6 +11,8 @@ namespace BagAPI.Data
 
         public DbSet<Toy> Toy { get; set; }
         public DbSet<Child> Child { get; set; }
+        public DbSet<Reindeer> Reindeer { get; set; }
+        public DbSet<FavoriteReindeer> FavoriteReindeer { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

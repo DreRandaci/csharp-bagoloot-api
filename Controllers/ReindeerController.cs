@@ -11,10 +11,10 @@ using Microsoft.EntityFrameworkCore;
 namespace BagAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class ToyController : Controller
+    public class ReindeerController : Controller
     {
         private BagAPIContext _context;
-        public ToyController(BagAPIContext ctx)
+        public ReindeerController(BagAPIContext ctx)
         {
             _context = ctx;
         }
@@ -23,19 +23,18 @@ namespace BagAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IQueryable<object> toys = _context.Toy.Include("Child");
+            IQueryable<object> reindeer = _context.Reindeer.Include("Favorites.Child");
 
-            if (toys == null)
+            if (reindeer == null)
             {
                 return NotFound();
             }
 
-            return Ok(toys);
-
+            return Ok(reindeer);
         }
 
         // GET api/values/5
-        [HttpGet("{id}", Name = "GetToy")]
+        [HttpGet("{id}", Name = "GetReindeer")]
         public IActionResult Get([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -45,14 +44,14 @@ namespace BagAPI.Controllers
 
             try
             {
-                Toy toy = _context.Toy.Include("Child").Single(m => m.ToyId == id);
+                Reindeer Reindeer = _context.Reindeer.Include("Favorites.Child").Single(m => m.ReindeerId == id);
 
-                if (toy == null)
+                if (Reindeer == null)
                 {
                     return NotFound();
                 }
                 
-                return Ok(toy);
+                return Ok(Reindeer);
             }
             catch (System.InvalidOperationException ex)
             {
@@ -60,16 +59,16 @@ namespace BagAPI.Controllers
             }
         }
 
-        // POST api/values
+        // POST api/Reindeer
         [HttpPost]
-        public IActionResult Post([FromBody] Toy toy)
+        public IActionResult Post([FromBody] Reindeer Reindeer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Toy.Add(toy);
+            _context.Reindeer.Add(Reindeer);
             
             try
             {
@@ -77,7 +76,7 @@ namespace BagAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                if (ToyExists(toy.ToyId))
+                if (ReindeerExists(Reindeer.ReindeerId))
                 {
                     return new StatusCodeResult(StatusCodes.Status409Conflict);
                 }
@@ -87,29 +86,29 @@ namespace BagAPI.Controllers
                 }
             }
 
-            return CreatedAtRoute("GetToy", new { id = toy.ToyId }, toy);
+            return CreatedAtRoute("GetReindeer", new { id = Reindeer.ReindeerId }, Reindeer);
         }
 
-        private bool ToyExists(int toyId)
+        private bool ReindeerExists(int deerId)
         {
-        return _context.Toy.Count(e => e.ToyId == toyId) > 0;
+          return _context.Reindeer.Count(e => e.ReindeerId == deerId) > 0;
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Toy toy)
+        public IActionResult Put(int id, [FromBody] Reindeer Reindeer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != toy.ToyId)
+            if (id != Reindeer.ReindeerId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(toy).State = EntityState.Modified;
+            _context.Entry(Reindeer).State = EntityState.Modified;
 
             try
             {
@@ -117,7 +116,7 @@ namespace BagAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ToyExists(id))
+                if (!ReindeerExists(id))
                 {
                     return NotFound();
                 }
@@ -139,16 +138,16 @@ namespace BagAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            Toy toy = _context.Toy.Single(m => m.ToyId == id);
-            if (toy == null)
+            Reindeer Reindeer = _context.Reindeer.Single(m => m.ReindeerId == id);
+            if (Reindeer == null)
             {
                 return NotFound();
             }
 
-            _context.Toy.Remove(toy);
+            _context.Reindeer.Remove(Reindeer);
             _context.SaveChanges();
 
-            return Ok(toy);
+            return Ok(Reindeer);
         }
     }
 }

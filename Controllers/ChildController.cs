@@ -23,7 +23,7 @@ namespace BagAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IQueryable<object> children = from child in _context.Child select child;
+            IQueryable<object> children = _context.Child.Include("Toys");
 
             if (children == null)
             {
@@ -31,7 +31,6 @@ namespace BagAPI.Controllers
             }
 
             return Ok(children);
-
         }
 
         // GET api/values/5
@@ -45,7 +44,7 @@ namespace BagAPI.Controllers
 
             try
             {
-                Child child = _context.Child.Single(m => m.ChildId == id);
+                Child child = _context.Child.Include("Toys").Single(m => m.ChildId == id);
 
                 if (child == null)
                 {
@@ -60,7 +59,7 @@ namespace BagAPI.Controllers
             }
         }
 
-        // POST api/values
+        // POST api/child
         [HttpPost]
         public IActionResult Post([FromBody] Child child)
         {
@@ -70,6 +69,39 @@ namespace BagAPI.Controllers
             }
 
             _context.Child.Add(child);
+            
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                if (ChildExists(child.ChildId))
+                {
+                    return new StatusCodeResult(StatusCodes.Status409Conflict);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtRoute("GetChild", new { id = child.ChildId }, child);
+        }
+
+        [HttpPost("/api/Child/Create")]
+        public IActionResult Post([FromBody] ChildToy childToy)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Child child = new Child(){Name=childToy.ChildName};
+            _context.Child.Add(child);
+
+            Toy toy = new Toy(){Name=childToy.ToyName, ChildId=child.ChildId};
+            _context.Toy.Add(toy);
             
             try
             {
