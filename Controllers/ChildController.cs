@@ -21,9 +21,18 @@ namespace BagAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(bool delivered)
         {
-            IQueryable<object> children = _context.Child.Include("Toys");
+            IQueryable<object> children;
+
+            if (delivered)
+            {
+                int del = (delivered) ? 1 : 0;
+                children = _context.Child.Include("Toys").Where(c => c.Delivered == del);
+            } else {
+                children = _context.Child.Include("Toys");
+            }
+
 
             if (children == null)
             {
