@@ -23,7 +23,7 @@ namespace BagAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IQueryable<object> toys = _context.Toy.Include("Child");
+            IQueryable<object> toys = _context.Toy;
 
             if (toys == null)
             {
@@ -45,7 +45,7 @@ namespace BagAPI.Controllers
 
             try
             {
-                Toy toy = _context.Toy.Include("Child").Single(m => m.ToyId == id);
+                Toy toy = _context.Toy.Single(m => m.ToyId == id);
 
                 if (toy == null)
                 {
