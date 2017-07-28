@@ -12,6 +12,6 @@ namespace BagAPI.Models
     [Required]
     public string Name { get; set; }
 
-    public virtual ICollection<FavoriteReindeer> Favorites { get; set; }
+    public ICollection<FavoriteReindeer> Fans { get; set; }
   }
 }

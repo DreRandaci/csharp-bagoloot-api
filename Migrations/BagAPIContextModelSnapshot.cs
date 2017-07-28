@@ -81,12 +81,12 @@ namespace BagAPI.Migrations
             modelBuilder.Entity("BagAPI.Models.FavoriteReindeer", b =>
                 {
                     b.HasOne("BagAPI.Models.Child", "Child")
-                        .WithMany("Favorites")
+                        .WithMany()
                         .HasForeignKey("ChildId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BagAPI.Models.Reindeer", "Reindeer")
-                        .WithMany("Favorites")
+                        .WithMany("Fans")
                         .HasForeignKey("ReindeerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

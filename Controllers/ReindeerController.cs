@@ -23,7 +23,7 @@ namespace BagAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IQueryable<object> reindeer = _context.Reindeer.Include("Favorites.Child");
+            IQueryable<object> reindeer = _context.Reindeer.Include("Fans.Child");
 
             if (reindeer == null)
             {
@@ -44,7 +44,7 @@ namespace BagAPI.Controllers
 
             try
             {
-                Reindeer Reindeer = _context.Reindeer.Include("Favorites.Child").Single(m => m.ReindeerId == id);
+                Reindeer Reindeer = _context.Reindeer.Include("Fans.Child").Single(m => m.ReindeerId == id);
 
                 if (Reindeer == null)
                 {
