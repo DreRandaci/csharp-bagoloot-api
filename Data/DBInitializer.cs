@@ -45,11 +45,31 @@ namespace BagAPI.Data
                         ChildId = children.Single(s => s.Name == "Svetlana").ChildId
                     },
                     new Toy { 
+                        Name = "Jump rope",
+                        ChildId = children.Single(s => s.Name == "Svetlana").ChildId
+                    },
+                    new Toy { 
+                        Name = "Transformers",
+                        ChildId = children.Single(s => s.Name == "Svetlana").ChildId
+                    },
+                    new Toy { 
                         Name = "Silly Putty",
                         ChildId = children.Single(s => s.Name == "Nigel").ChildId
                     },
                     new Toy { 
+                        Name = "Yo-yo",
+                        ChildId = children.Single(s => s.Name == "Nigel").ChildId
+                    },
+                    new Toy { 
                         Name = "Wonder Woman",
+                        ChildId = children.Single(s => s.Name == "Sequina").ChildId
+                    },
+                    new Toy { 
+                        Name = "Batman",
+                        ChildId = children.Single(s => s.Name == "Sequina").ChildId
+                    },
+                    new Toy { 
+                        Name = "Army men",
                         ChildId = children.Single(s => s.Name == "Sequina").ChildId
                     },
                 };
@@ -111,7 +131,7 @@ namespace BagAPI.Data
                     },
                     new FavoriteReindeer { 
                         ReindeerId = reindeer.Single(s => s.Name == "Prancer").ReindeerId,
-                        ChildId = children.Single(s => s.Name == "Sequina").ChildId
+                        ChildId = children.Single(s => s.Name == "Nigel").ChildId
                     },
                 };
 

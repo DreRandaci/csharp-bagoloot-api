@@ -8,7 +8,7 @@ using BagAPI.Data;
 namespace BagAPI.Migrations
 {
     [DbContext(typeof(BagAPIContext))]
-    [Migration("20170728004140_initial")]
+    [Migration("20170728011841_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
