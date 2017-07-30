@@ -21,16 +21,24 @@ namespace BagAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public IActionResult Get(bool delivered)
+        public async Task<IActionResult> Get(string delivered, string name)
         {
-            IQueryable<object> children;
+            IEnumerable<Child> children;
 
-            if (delivered)
+            (string Name, string Delivered) filter = (name, delivered);
+
+            if (filter.Delivered == "1")
             {
-                int del = (delivered) ? 1 : 0;
-                children = _context.Child.Include("Toys").Where(c => c.Delivered == del);
+                children = await _context.Child.Include("Toys").Where(c => c.Delivered == 1).ToListAsync();
+            } else if (filter.Delivered == "0") {
+                children = await _context.Child.Include("Toys").Where(c => c.Delivered == 0).ToListAsync();
             } else {
-                children = _context.Child.Include("Toys");
+                children = await _context.Child.Include("Toys").ToListAsync();
+            }
+
+            if (filter.Name != null)
+            {
+                children = children.Where(c => c.Name.Contains(filter.Name));
             }
 
 
@@ -44,7 +52,7 @@ namespace BagAPI.Controllers
 
         // GET api/values/5
         [HttpGet("{id}", Name = "GetChild")]
-        public IActionResult Get([FromRoute] int id)
+        public IActionResult Get([FromRoute] int? id)
         {
             if (!ModelState.IsValid)
             {
