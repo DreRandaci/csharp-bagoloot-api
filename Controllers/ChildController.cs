@@ -34,8 +34,9 @@ namespace BagAPI.Controllers
         }
 
         /*
-            GET api/child
-
+            Author: Steve Brownlee
+            URL: GET api/child
+            Description:
             This method handles GET requests for the child resource. There
             are two URL parameters that can be used to filter the list of 
             children returned.
@@ -81,7 +82,11 @@ namespace BagAPI.Controllers
             return Ok(children);
         }
 
-        // GET api/child/5
+        /*
+            Author: Steve Brownlee
+            URL: GET api/child/1
+            Description: This method handles GET requests for a single child resource.
+         */
         [HttpGet("{id}", Name = "GetChild")]
         public IActionResult Get([FromRoute] int id)
         {
@@ -118,19 +123,36 @@ namespace BagAPI.Controllers
             }
         }
 
-        // POST api/child
+        /*
+            Author: Steve Brownlee
+            URL: POST api/child/1
+            Description: This method handles POST requests to create a new child.
+         */
         [HttpPost]
         public IActionResult Post([FromBody] Child child)
         {
+            /*
+                Model validation works differently here, since there
+                is a complex type being detected with ([FromBody] Child child).
+                This method will extract the key/value pairs from the JSON
+                object that is posted, and create a new instance of the Child
+                model class, with the corresponding properties set.
+
+                If any of the validations fail, such as length of string values,
+                if a value is required, etc., then the API will respond that
+                it is a bad request.
+             */
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            // Add the child to the database context
             _context.Child.Add(child);
             
             try
             {
+                // Commit the newly created child to the database
                 _context.SaveChanges();
             }
             catch (DbUpdateException)
@@ -145,9 +167,42 @@ namespace BagAPI.Controllers
                 }
             }
 
+            /*
+                The CreatedAtRoute method will return the newly created child in the
+                body of the response, and the Location meta-data header will contain
+                the URL for the new child resource
+
+                To see this run this from command line:
+                    curl --header "Content-Type: application/json" -s -X POST -D - --data '{"name":"Billy Baxter"}' http://localhost:5000/api/child
+
+                You will see this response:
+                    HTTP/1.1 201 Created
+                    Date: Mon, 31 Jul 2017 01:04:58 GMT
+                    Transfer-Encoding: chunked
+                    Content-Type: application/json; charset=utf-8
+                    Location: http://localhost:5000/api/Child/4
+                    Server: Kestrel
+
+                    {"childId":4,"name":"Billy Baxter","delivered":0,"toys":null}
+             */
             return CreatedAtRoute("GetChild", new { id = child.ChildId }, child);
         }
 
+        /*
+            Author: Steve Brownlee
+            URL: POST api/child/create
+            Description:
+            Custom route that is outside the conventions used by ASP.NET to determine
+            the routing for each resource. Also notice that the model binding is to
+            the ChildToy class. It is not a table in the database since I don't add
+            a DBSet of it in the BagAPIContext.cs file.
+
+            Example POST body:
+                {
+                    "toyname": "Hot wheels",
+                    "childname": "Samantha Young"
+                }
+         */
         [HttpPost("/api/Child/Create")]
         public IActionResult Post([FromBody] ChildToy childToy)
         {
@@ -156,14 +211,20 @@ namespace BagAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            Child child = new Child(){Name=childToy.ChildName};
+            // Create the child and add to the context
+            Child child = new Child(){ Name=childToy.ChildName };
             _context.Child.Add(child);
 
-            Toy toy = new Toy(){Name=childToy.ToyName, ChildId=child.ChildId};
+            // Create the toy and add to the context
+            Toy toy = new Toy(){
+                Name=childToy.ToyName, 
+                ChildId=child.ChildId
+            };
             _context.Toy.Add(toy);
             
             try
             {
+                // Commit both new records to the database at once
                 _context.SaveChanges();
             }
             catch (DbUpdateException)
@@ -181,12 +242,21 @@ namespace BagAPI.Controllers
             return CreatedAtRoute("GetChild", new { id = child.ChildId }, child);
         }
 
-        private bool ChildExists(int kidId)
-        {
-          return _context.Child.Count(e => e.ChildId == kidId) > 0;
-        }
+        /*
+            Author: Steve Brownlee
+            URL: PUT api/child/5
+            Description:
+            Handles the updating of a child record. Remember that a PUT requires
+            you to send the entire object in the request, not just the field that
+            you want to change.
 
-        // PUT api/child/5
+            Example PUT body:
+                {
+                    "childid": 5,
+                    "name": "Samantha Young",
+                    "delivered": 0
+                }
+         */
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Child child)
         {
@@ -221,7 +291,12 @@ namespace BagAPI.Controllers
             return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 
-        // DELETE api/child/5
+        /*
+            Author: Steve Brownlee
+            URL: DELETE api/child/5
+            Description:
+            Handles the deletion of a child record.
+         */
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -240,6 +315,11 @@ namespace BagAPI.Controllers
             _context.SaveChanges();
 
             return Ok(child);
+        }
+
+        private bool ChildExists(int kidId)
+        {
+          return _context.Child.Count(e => e.ChildId == kidId) > 0;
         }
     }
 }
