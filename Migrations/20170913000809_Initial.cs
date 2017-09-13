@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BagAPI.Migrations
+namespace BagoLootAPI.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,10 +12,10 @@ namespace BagAPI.Migrations
                 name: "Child",
                 columns: table => new
                 {
-                    ChildId = table.Column<int>(nullable: false)
+                    ChildId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Delivered = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    Delivered = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,9 +26,9 @@ namespace BagAPI.Migrations
                 name: "Reindeer",
                 columns: table => new
                 {
-                    ReindeerId = table.Column<int>(nullable: false)
+                    ReindeerId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,10 +39,10 @@ namespace BagAPI.Migrations
                 name: "Toy",
                 columns: table => new
                 {
-                    ToyId = table.Column<int>(nullable: false)
+                    ToyId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ChildId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    ChildId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,10 +59,10 @@ namespace BagAPI.Migrations
                 name: "FavoriteReindeer",
                 columns: table => new
                 {
-                    FavoriteReindeerId = table.Column<int>(nullable: false)
+                    FavoriteReindeerId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ChildId = table.Column<int>(nullable: false),
-                    ReindeerId = table.Column<int>(nullable: false)
+                    ChildId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ReindeerId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BagAPI.Models
+namespace BagoLootAPI.Models
 {
   public class Child
   {
@@ -17,7 +17,7 @@ namespace BagAPI.Models
     [Required]
     public string Name { get; set; }
     public int Delivered { get; set; }
-    public ICollection<Toy> Toys { get; set; }
+    public virtual ICollection<Toy> Toys { get; set; }
 
   }
 }

@@ -2,16 +2,16 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using BagAPI.Models;
+using BagoLootAPI.Models;
 using System.Threading.Tasks;
 
-namespace BagAPI.Data
+namespace BagoLootAPI.Data
 {
     public static class DbInitializer
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new BagAPIContext(serviceProvider.GetRequiredService<DbContextOptions<BagAPIContext>>()))
+            using (var context = new ApplicationDbContext(serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
                 // Look for any products.
                 if (context.Child.Any())

@@ -2,67 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BagoLootAPI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using BagAPI.Data;
+using Microsoft.Extensions.Options;
 
-namespace BagAPI
+namespace BagoLootAPI
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            Console.WriteLine("Startup");
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Console.WriteLine("ConfigureServices");
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
-            // Add CORS framework
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowWhiteListOrigins",
-                    builder => builder.WithOrigins("http://example.com"));
-            });
-
-            // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            string path = System.Environment.GetEnvironmentVariable("BAG_DB");
-            var connection = $"Filename={path}";
-            Console.WriteLine($"connection = {connection}");
-            services.AddDbContext<BagAPIContext>(options => options.UseSqlite(connection));
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseCors("AllowWhiteListOrigins");
-
-            Console.WriteLine("Configure");
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            DbInitializer.Initialize(app.ApplicationServices);
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             app.UseMvc();
-
         }
     }
 }

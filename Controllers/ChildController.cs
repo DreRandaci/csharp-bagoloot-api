@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BagAPI.Data;
-using BagAPI.Models;
+using BagoLootAPI.Data;
+using BagoLootAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +11,12 @@ using Microsoft.Extensions.Logging;
 
 // In an ASP.NET application, the namespace will often, but does not need to,
 // match the name of the directory in which the class is contained.
-namespace BagAPI.Controllers
+namespace BagoLootAPI.Controllers
 {
     [Route("api/[controller]")]
     public class ChildController : Controller
     {
-        private BagAPIContext _context;
+        private ApplicationDbContext _context;
         private ILogger _log;
 
         /*
@@ -27,7 +27,7 @@ namespace BagAPI.Controllers
                 2. The logging service, so I can write log messages without 
                    resorting to Console.WriteLine.
          */
-        public ChildController(BagAPIContext ctx, ILogger<ChildController> logger)
+        public ChildController(ApplicationDbContext ctx, ILogger<ChildController> logger)
         {
             _context = ctx;
             _log = logger;
@@ -195,7 +195,7 @@ namespace BagAPI.Controllers
             Custom route that is outside the conventions used by ASP.NET to determine
             the routing for each resource. Also notice that the model binding is to
             the ChildToy class. It is not a table in the database since I don't add
-            a DBSet of it in the BagAPIContext.cs file.
+            a DBSet of it in the ApplicationDbContext.cs file.
 
             Example POST body:
                 {

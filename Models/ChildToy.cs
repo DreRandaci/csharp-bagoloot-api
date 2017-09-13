@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BagAPI.Models
+namespace BagoLootAPI.Models
 {
   public class ChildToy
   {

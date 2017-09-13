@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using BagAPI.Models;
+using BagoLootAPI.Models;
 
-namespace BagAPI.Data
+namespace BagoLootAPI.Data
 {
-    public class BagAPIContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public BagAPIContext(DbContextOptions<BagAPIContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         { }
 

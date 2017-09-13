@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BagAPI.Models
+namespace BagoLootAPI.Models
 {
   public class FavoriteReindeer
   {
@@ -15,7 +15,7 @@ namespace BagAPI.Models
     [Required]
     public int ChildId { get; set; }
 
-    public virtual Child Child { get; set; }
-    public virtual Reindeer Reindeer { get; set; }
+    public Child Child { get; set; }
+    public Reindeer Reindeer { get; set; }
   }
 }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BagAPI.Models
+namespace BagoLootAPI.Models
 {
   public class Toy
   {
@@ -12,6 +12,6 @@ namespace BagAPI.Models
 
     public int ChildId { get; set; }
 
-    public virtual Child Child { get; set; }
+    public Child Child { get; set; }
   }
 }

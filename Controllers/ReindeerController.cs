@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BagAPI.Data;
-using BagAPI.Models;
+using BagoLootAPI.Data;
+using BagoLootAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BagAPI.Controllers
+namespace BagoLootAPI.Controllers
 {
     [Route("api/[controller]")]
     public class ReindeerController : Controller
     {
-        private BagAPIContext _context;
-        public ReindeerController(BagAPIContext ctx)
+        private ApplicationDbContext _context;
+        public ReindeerController(ApplicationDbContext ctx)
         {
             _context = ctx;
         }
