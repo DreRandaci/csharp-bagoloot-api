@@ -9,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BagoLootAPI
 {
-    [EnableCors("AllowWhiteListOrigins")]
     [Route("/api/token")]
     public class TokenController : Controller
     {
