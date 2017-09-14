@@ -12,11 +12,18 @@ namespace BagoLootAPI
     [Route("/api/token")]
     public class TokenController : Controller
     {
+        [HttpGet]
         [Authorize]
         public IActionResult Get(){
             return new ObjectResult(new {
                 Username = User.Identity.Name
             });                
+        }
+        
+        [HttpPut]
+        [Authorize]
+        public IActionResult Put(){
+            return new ObjectResult(GenerateToken(User.Identity.Name));
         }
         
         [HttpPost]
@@ -40,13 +47,17 @@ namespace BagoLootAPI
                 new Claim(ClaimTypes.Name, username),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
+                new Claim(ClaimTypes.Role, "Administrator"),
             };
 
             var token = new JwtSecurityToken(
                 new JwtHeader(new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("the secret that needs to be at least 16 characeters long for HmacSha256")), 
-                                             SecurityAlgorithms.HmacSha256)),
-                new JwtPayload(claims));
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes("7A735D7B-1A19-4D8A-9CFA-99F55483013F")), 
+                        SecurityAlgorithms.HmacSha256)
+                    ),
+                new JwtPayload(claims)
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
