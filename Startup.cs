@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BagoLootAPI.Data;
+using BagoLootAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,7 @@ namespace BagoLootAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Set up global CORS policy for controllers
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -37,13 +40,20 @@ namespace BagoLootAPI
                     .AllowCredentials() );
             });
 
+            // Set up DB context to use SQLite
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Set up identity server so services like SignInManager can be injected into controllers
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            // Set up MVC service
             services.AddMvc()
                 .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-
+            // Set up JWT authentication service
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = "Jwt";  

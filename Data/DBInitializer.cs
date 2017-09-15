@@ -4,15 +4,46 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using BagoLootAPI.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BagoLootAPI.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(IServiceProvider serviceProvider)
+        public async static void Initialize(IServiceProvider serviceProvider)
         {
             using (var context = new ApplicationDbContext(serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
+                var roleStore = new RoleStore<IdentityRole>(context);
+                var userstore = new UserStore<User>(context);
+
+                if (!context.Roles.Any(r => r.Name == "Administrator"))
+                {
+                    var role = new IdentityRole { Name = "Administrator", NormalizedName = "Administrator" };
+                    await roleStore.CreateAsync(role);
+                }
+
+                if (!context.User.Any(u => u.FirstName == "admin"))
+                {
+                    //  This method will be called after migrating to the latest version.
+                    User user = new User {
+                        FirstName = "admin",
+                        LastName = "admin",
+                        UserName = "admin@admin.com",
+                        NormalizedUserName = "ADMIN@ADMIN.COM",
+                        Email = "admin@admin.com",
+                        NormalizedEmail = "ADMIN@ADMIN.COM",
+                        EmailConfirmed = true,
+                        LockoutEnabled = false,
+                        SecurityStamp = Guid.NewGuid().ToString("D")
+                    };
+                    var passwordHash = new PasswordHasher<User>();
+                    user.PasswordHash = passwordHash.HashPassword(user, "Admin8*");
+                    await userstore.CreateAsync(user);
+                    await userstore.AddToRoleAsync(user, "Administrator");
+                }
+
                 // Look for any products.
                 if (context.Child.Any())
                 {
