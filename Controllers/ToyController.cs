@@ -19,7 +19,7 @@ namespace BagoLootAPI.Controllers
             _context = ctx;
         }
 
-        // GET api/values
+        // GET api/toy
         [HttpGet]
         public IActionResult Get()
         {
@@ -34,7 +34,7 @@ namespace BagoLootAPI.Controllers
 
         }
 
-        // GET api/values/5
+        // GET api/toy/5
         [HttpGet("{id}", Name = "GetToy")]
         public IActionResult Get([FromRoute] int id)
         {
@@ -51,7 +51,7 @@ namespace BagoLootAPI.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 return Ok(toy);
             }
             catch (System.InvalidOperationException ex)
@@ -60,7 +60,7 @@ namespace BagoLootAPI.Controllers
             }
         }
 
-        // POST api/values
+        // POST api/toy
         [HttpPost]
         public IActionResult Post([FromBody] Toy toy)
         {
@@ -70,7 +70,7 @@ namespace BagoLootAPI.Controllers
             }
 
             _context.Toy.Add(toy);
-            
+
             try
             {
                 _context.SaveChanges();
@@ -95,7 +95,7 @@ namespace BagoLootAPI.Controllers
         return _context.Toy.Count(e => e.ToyId == toyId) > 0;
         }
 
-        // PUT api/values/5
+        // PUT api/toy/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Toy toy)
         {
@@ -130,7 +130,7 @@ namespace BagoLootAPI.Controllers
             return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 
-        // DELETE api/values/5
+        // DELETE api/toy/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

@@ -19,7 +19,7 @@ namespace BagoLootAPI.Controllers
             _context = ctx;
         }
 
-        // GET api/values
+        // GET api/reindeer
         [HttpGet]
         public IActionResult Get()
         {
@@ -33,7 +33,7 @@ namespace BagoLootAPI.Controllers
             return Ok(reindeer);
         }
 
-        // GET api/values/5
+        // GET api/reindeer/5
         [HttpGet("{id}", Name = "GetReindeer")]
         public IActionResult Get([FromRoute] int id)
         {
@@ -50,7 +50,7 @@ namespace BagoLootAPI.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 return Ok(Reindeer);
             }
             catch (System.InvalidOperationException ex)
@@ -69,7 +69,7 @@ namespace BagoLootAPI.Controllers
             }
 
             _context.Reindeer.Add(Reindeer);
-            
+
             try
             {
                 _context.SaveChanges();
@@ -94,7 +94,7 @@ namespace BagoLootAPI.Controllers
           return _context.Reindeer.Count(e => e.ReindeerId == deerId) > 0;
         }
 
-        // PUT api/values/5
+        // PUT api/reindeer/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Reindeer Reindeer)
         {
@@ -129,7 +129,7 @@ namespace BagoLootAPI.Controllers
             return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 
-        // DELETE api/values/5
+        // DELETE api/reindeer/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
