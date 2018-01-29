@@ -23,7 +23,24 @@ namespace BagoLootAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IQueryable<object> reindeer = _context.Reindeer.Include("Fans.Child");
+            /**
+                You can use simply dot notation to traverse tables in a many-to-many
+                relationship situation. Unfortunately, this will include the join
+                table information in the JSON serialization:
+
+                    IQueryable<object> reindeer = _context.Reindeer.Include("Fans.Child");
+
+                Below, you will see an example of using LINQ to traverse the relationship
+                and then build an anonymous object representing the exact JSON
+                representation that is needed - excluding the join table info.
+             */
+            var reindeer = _context.Reindeer
+                .Select(r => new {
+                    Id = r.ReindeerId,
+                    Name = r.Name,
+                    Fans = r.Fans.Select(f => f.Child)
+                })
+                ;
 
             if (reindeer == null)
             {

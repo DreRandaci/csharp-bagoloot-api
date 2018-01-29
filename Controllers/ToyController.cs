@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BagoLootAPI.Data;
 using BagoLootAPI.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
